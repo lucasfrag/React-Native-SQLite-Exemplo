@@ -1,4 +1,4 @@
-# React Native CRUD Exemplo
+# React Native SQLite Exemplo
 Lista de notas de alunos criada para exemplificar as operações de CRUD usando o banco de dados SQLite em uma aplicação React Native.
 
 ## Instalação
