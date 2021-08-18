@@ -1,5 +1,5 @@
 # React Native CRUD Exemplo
-Lista de notas de alunos criada para exemplificar as operações de CRUD em uma aplicação React Native.
+Lista de notas de alunos criada para exemplificar as operações de CRUD usando o banco de dados SQLite em uma aplicação React Native.
 
 ## Instalação
 1. Clone esse repositório ou faça o download dos arquivos
