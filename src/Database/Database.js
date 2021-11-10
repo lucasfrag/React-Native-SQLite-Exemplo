@@ -30,7 +30,7 @@ export default class Database
                             console.log("Erro Recebido: ", error);
                             console.log("O Banco de dados não está pronto ... Criando Dados");
                             db.transaction((tx) => {
-                                tx.executeSql('CREATE TABLE IF NOT EXISTS Aluno (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(30), disciplina VARCHAR(30), nota DOUBLE)');
+                                tx.executeSql('CREATE TABLE IF NOT EXISTS Aluno (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(30), disciplina VARCHAR(30), nota DOUBLE, aprovado varchar(10))');
                             }).then(() => {
                                 console.log("Tabela criada com Sucesso");                
                             }).catch(error => {                    
@@ -72,8 +72,8 @@ export default class Database
                     var len = results.rows.length;          
                     for (let i = 0; i < len; i++) {            
                         let row = results.rows.item(i);            
-                        const { id, nome, disciplina, nota } = row;
-                        listaAlunos.push({id,nome,disciplina,nota});
+                        const { id, nome, disciplina, nota, aprovado } = row;
+                        listaAlunos.push({id,nome,disciplina,nota, aprovado});
                     }
                     resolve(listaAlunos);
                 });
@@ -94,7 +94,7 @@ export default class Database
             this.Conectar().then((db) => {      
                 db.transaction((tx) => {     
                     //Query SQL para inserir um novo produto   
-                    tx.executeSql('INSERT INTO Aluno(nome, disciplina, nota) VALUES (?, ?, ?)', [aluno.nome, aluno.disciplina, aluno.nota]).then(([tx, results]) => { 
+                    tx.executeSql('INSERT INTO Aluno(nome, disciplina, nota, aprovado) VALUES (?, ?, ?, ?)', [aluno.nome, aluno.disciplina, aluno.nota, aluno.aprovado]).then(([tx, results]) => { 
                         resolve(results);        
                     });      
                 }).then((result) => {        
@@ -108,12 +108,31 @@ export default class Database
         });  
     }
 
-    Atualizar(aluno) {  
+    Aprovar(id) {  
         return new Promise((resolve) => {    
             this.Conectar().then((db) => {      
                 db.transaction((tx) => {
                     //Query SQL para atualizar um dado no banco        
-                    tx.executeSql('UPDATE Aluno SET nome = ?, disciplina = ?, nota = ? WHERE id = ?', [aluno.nome, aluno.disciplina, aluno.nota, aluno.id]).then(([tx, results]) => {          
+                    tx.executeSql("UPDATE Aluno SET aprovado = 'Sim' WHERE id = ?", [id]).then(([tx, results]) => {          
+                    resolve(results);        
+                });      
+            }).then((result) => {        
+                  this.Desconectar(db);      
+                }).catch((err) => {        
+                  console.log(err);      
+                });    
+            }).catch((err) => {     
+                console.log(err);    
+            });  
+        });  
+    }
+
+    Reprovar(id) {  
+        return new Promise((resolve) => {    
+            this.Conectar().then((db) => {      
+                db.transaction((tx) => {
+                    //Query SQL para atualizar um dado no banco        
+                    tx.executeSql("UPDATE Aluno SET aprovado = 'Não' WHERE id = ?", [id]).then(([tx, results]) => {          
                     resolve(results);        
                 });      
             }).then((result) => {        

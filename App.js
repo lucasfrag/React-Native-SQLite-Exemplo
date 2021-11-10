@@ -37,6 +37,18 @@ export default class App extends Component
     DevSettings.reload();
   }
 
+  AprovarAluno(id) {
+    const banco = new Database();
+    banco.Aprovar(id);
+    DevSettings.reload();    
+  }
+
+  ReprovarAluno(id) {
+    const banco = new Database();
+    banco.Reprovar(id);
+    DevSettings.reload();
+  }
+
   render(){
     return(
       <ScrollView>
@@ -52,7 +64,7 @@ export default class App extends Component
 
 
         {
-          this.state.listaAlunos.map( item => (<ListaAlunos key={item.id} id={item.id} nome={item.nome} disciplina={item.disciplina} nota={item.nota} deletar={this.DeletarAluno} />) )
+          this.state.listaAlunos.map( item => (<ListaAlunos key={item.id} id={item.id} nome={item.nome} aprovado={item.aprovado} disciplina={item.disciplina} nota={item.nota} deletar={this.DeletarAluno} aprovar={this.AprovarAluno} reprovar={this.ReprovarAluno} />) )
         }
 
 
