@@ -1,73 +1,81 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, TextInput, Button, DevSettings } from 'react-native'
 
-import ListaAlunos from './src/Componentes/ListaAlunos'
-import Database from './src/Database/Database';
-import Aluno from './src/Models/Aluno';
+import Database from './src/Database/Database'
+import ItemAluno from './src/Components/ItemAluno'
+import Aluno from './src/Models/Aluno'
 
 export default class App extends Component 
 {
-
   constructor(props) {
     super(props);
     this.state = {
-      nome: "", 
-      disciplina: "",
+      nome: "",
       nota: 0,
       listaAlunos: []
-    }
+    }    
     this.ListarAlunos()
   }
 
-  ListarAlunos() {
+
+  ListarAlunos = () => {
     const banco = new Database();
-    banco.Listar().then( data => {this.setState({ listaAlunos: data })})
+    banco.Listar().then( lista => { this.setState({listaAlunos : lista}) } )
   }
 
-  CadastrarAluno(nome, disciplina, nota) {
-    const novoAluno = new Aluno(nome, disciplina, nota);
+  CadastrarAluno = (nome, nota) => {
+    const novoAluno = new Aluno(nome, nota, null)
     const banco = new Database();
     banco.Inserir(novoAluno);
-    this.ListarAlunos();
+    this.ListarAlunos()
   }
 
-  DeletarAluno(id) {
-    const banco = new Database();
-    banco.Deletar(id);
-    DevSettings.reload();
-  }
-
-  AprovarAluno(id) {
+  AprovarAluno = (id) => {
     const banco = new Database();
     banco.Aprovar(id);
-    DevSettings.reload();    
+    this.ListarAlunos()
+    //DevSettings.reload();
   }
 
-  ReprovarAluno(id) {
+  ReprovarAluno = (id) => {
     const banco = new Database();
     banco.Reprovar(id);
-    DevSettings.reload();
-  }
+    this.ListarAlunos()
+    //DevSettings.reload();
+  }  
 
-  render(){
+  DeletarAluno = (id) => {
+    const banco = new Database();
+    banco.Deletar(id);
+    this.ListarAlunos()
+    //DevSettings.reload();
+  }    
+
+  render()
+  {
     return(
       <ScrollView>
-        <Text style={{fontSize: 20}}>Cadastro de Notas</Text>
+        <Text style={{ fontSize: 20 }}>Cadastro de alunos </Text>
 
-        <TextInput onChangeText={(valorInformado) => {this.setState({ nome: valorInformado})}} placeholder="Nome do aluno" />
-        <TextInput onChangeText={(valorInformado) => {this.setState({ disciplina: valorInformado})}} placeholder="Disciplina" />
-        <TextInput onChangeText={(valorInformado) => {this.setState({ nota: valorInformado})}} placeholder="Nota" />
-        <Button title="Cadastrar" onPress={ () => { this.CadastrarAluno(this.state.nome, this.state.disciplina, this.state.nota) } }></Button>
+        <TextInput placeholder='Nome' onChangeText={(valor) => {this.setState({ nome : valor })}} />
+        <TextInput placeholder='Nota' onChangeText={(valor) => {this.setState({ nota : valor })}} />
+        <Button title="Cadastrar" onPress={ ()=> { this.CadastrarAluno(this.state.nome, this.state.nota) }} />
 
-        <Text style={{fontSize: 20}}>Lista de Notas</Text>
+        <Text>Lista de Alunos</Text>
         <Text></Text>
-
-
         {
-          this.state.listaAlunos.map( item => (<ListaAlunos key={item.id} id={item.id} nome={item.nome} aprovado={item.aprovado} disciplina={item.disciplina} nota={item.nota} deletar={this.DeletarAluno} aprovar={this.AprovarAluno} reprovar={this.ReprovarAluno} />) )
+          this.state.listaAlunos.map( item => (
+          <ItemAluno 
+            key={item.id} 
+            id={item.id} 
+            nome={item.nome} 
+            nota={item.nota} 
+            aprovado={item.aprovado} 
+            aprovar={this.AprovarAluno}
+            reprovar={this.ReprovarAluno}
+            deletar={this.DeletarAluno}
+          />))
         }
-
-
       </ScrollView>
     )
   }
