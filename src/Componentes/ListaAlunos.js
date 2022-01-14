@@ -5,24 +5,24 @@ export default class ListaAlunos extends Component
 {
   getEstilo() {
     if(this.props.aprovado == 'Sim') {
-      return { flex: 1,  borderRadius: 10, backgroundColor:'#00ff2a', padding: 10 }
+      return { color:'#39bf00', fontWeight: 'bold' }
     } else if (this.props.aprovado == 'Não') {
-      return { flex: 1,  borderRadius: 10, backgroundColor:'#fa2f5f', padding: 10 } 
+      return { color:'#fa2f5f', fontWeight: 'bold' } 
     } else {
-      return { flex: 1,  borderRadius: 10, backgroundColor:'white', padding: 10 } 
+      return { color:'black' } 
     }
   }
 
   render(){
     return(
       <View style={{ margin: 5}}>
-        <View style={this.getEstilo()}>
+        <View style={{flex: 1,  borderRadius: 10, backgroundColor:'white', padding: 10}}>
           <View style={{flex: 1}}>
             
             <Text>ID: {this.props.id}</Text>
             <Text>Nome: {this.props.nome}</Text>
             <Text>Disciplina: {this.props.disciplina}</Text>
-            <Text>Aprovado: {this.props.aprovado}</Text>
+            <Text>Aprovado: <Text style={this.getEstilo()}>{this.props.aprovado}</Text></Text>
             <Text>Nota: {this.props.nota}</Text>
             
           </View>

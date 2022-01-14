@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, TextInput, Button, DevSettings } from 'react-native'
+import { View, ScrollView, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 
 import Database from './src/Database/Database'
-import ItemAluno from './src/Components/ItemAluno'
+import ListaAlunos from './src/Componentes/ListaAlunos'
 import Aluno from './src/Models/Aluno'
 
 export default class App extends Component 
@@ -24,7 +24,7 @@ export default class App extends Component
   }
 
   CadastrarAluno = (nome, nota) => {
-    const novoAluno = new Aluno(nome, nota, null)
+    const novoAluno = new Aluno(nome, nota, "???")
     const banco = new Database();
     banco.Inserir(novoAluno);
     this.ListarAlunos()
@@ -41,31 +41,32 @@ export default class App extends Component
     const banco = new Database();
     banco.Reprovar(id);
     this.ListarAlunos()
-    //DevSettings.reload();
   }  
 
   DeletarAluno = (id) => {
     const banco = new Database();
     banco.Deletar(id);
     this.ListarAlunos()
-    //DevSettings.reload();
   }    
 
   render()
   {
     return(
       <ScrollView>
-        <Text style={{ fontSize: 20 }}>Cadastro de alunos </Text>
+        <View>
+          <Text style={estilo.titulo}>Cadastro de alunos </Text>
 
-        <TextInput placeholder='Nome' onChangeText={(valor) => {this.setState({ nome : valor })}} />
-        <TextInput placeholder='Nota' onChangeText={(valor) => {this.setState({ nota : valor })}} />
-        <Button title="Cadastrar" onPress={ ()=> { this.CadastrarAluno(this.state.nome, this.state.nota) }} />
-
-        <Text>Lista de Alunos</Text>
+          <TextInput placeholder='Digite o nome do aluno...' onChangeText={(valor) => {this.setState({ nome : valor })}} />
+          <TextInput placeholder='Digite a nota do aluno... ' onChangeText={(valor) => {this.setState({ nota : valor })}} />
+          <TouchableOpacity style={estilo.botao} onPress={ ()=> { this.CadastrarAluno(this.state.nome, this.state.nota) }}>
+            <Text style={{color: 'white', fontWeight: 'bold'}}>Salvar</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={estilo.titulo}>Lista de Alunos</Text>
         <Text></Text>
         {
           this.state.listaAlunos.map( item => (
-          <ItemAluno 
+          <ListaAlunos 
             key={item.id} 
             id={item.id} 
             nome={item.nome} 
@@ -81,3 +82,29 @@ export default class App extends Component
   }
 
 }
+
+const estilo = StyleSheet.create({
+  titulo: {
+    fontSize: 18,
+    margin: 5,
+    color: 'black'
+  },
+  botao: {
+    width: 150,
+    backgroundColor: '#39bf00',
+    alignItems: 'center',
+    justifyContent: "center",
+    padding: 10,
+    
+    margin: 5,
+    color: 'white'
+  },
+  areaBotao: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: "center"
+  },
+  linha1: {
+
+  }
+})
