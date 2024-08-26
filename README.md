@@ -16,7 +16,3 @@ Lista de notas de alunos criada para exemplificar as operações de CRUD usando 
 * [React Native](https://reactnative.dev)
 * [React Native SQLite Storage](https://github.com/andpor/react-native-sqlite-storage)
 
-## Vídeo tutorial no YouTube ▶️
-- Parte 1: https://youtu.be/eQqehTRs-y0?si=sGe7ywBgPpsOGeHN
-- Parte 2: https://youtu.be/3gvjnbihCg8?si=9AgxrH46SHcO88HH
-- Parte 3: https://youtu.be/yRWDsyNtzE4?si=DWsEu6yposMeB5zQ
